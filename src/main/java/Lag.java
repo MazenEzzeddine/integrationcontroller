@@ -1,16 +1,11 @@
-import org.apache.kafka.clients.admin.AdminClient;
-import org.apache.kafka.clients.admin.AdminClientConfig;
-import org.apache.kafka.clients.admin.ListOffsetsResult;
-import org.apache.kafka.clients.admin.OffsetSpec;
+import org.apache.kafka.clients.admin.*;
 import org.apache.kafka.clients.consumer.OffsetAndMetadata;
+import org.apache.kafka.common.KafkaFuture;
 import org.apache.kafka.common.TopicPartition;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 
 public class Lag {
@@ -23,6 +18,10 @@ public class Lag {
     static long totalLag;
     //////////////////////////////////////////////////////////////////////////////
     static ArrayList<Partition> partitions = new ArrayList<>();
+
+
+    static Map<String, ConsumerGroupDescription> consumerGroupDescriptionMap;
+
 
     public  static void readEnvAndCrateAdminClient() throws ExecutionException, InterruptedException {
         topic = "testtopic1";
@@ -74,4 +73,24 @@ public class Lag {
        }
 
     }*/
+
+
+   public  static int queryConsumerGroup() throws ExecutionException, InterruptedException {
+        DescribeConsumerGroupsResult describeConsumerGroupsResult =
+                admin.describeConsumerGroups(Collections.singletonList("testgroup1"));
+        KafkaFuture<Map<String, ConsumerGroupDescription>> futureOfDescribeConsumerGroupsResult =
+                describeConsumerGroupsResult.all();
+
+        consumerGroupDescriptionMap = futureOfDescribeConsumerGroupsResult.get();
+
+
+        int members = consumerGroupDescriptionMap.get("testgroup1").members().size();
+
+        log.info("consumers nb as per kafka {}", members );
+
+        return members;
+
+
+    }
+
 }
