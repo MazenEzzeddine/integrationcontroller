@@ -39,7 +39,7 @@ public class BinPackLag2 {
                     + (long) ((ArrivalProducer.totalArrivalrate * rebTime)/5.0));
         }
 
-        if (BinPackState2.action.equals("up")) {
+        if (BinPackState2.action.equals("up") || BinPackState2.action.equals("REASS")) {
             int neededsize = binPackAndScale();
             log.info("We currently need the following consumers for group1 (as per the bin pack) {}", neededsize);
             int replicasForscale = neededsize - BinPackState2.size;
@@ -53,7 +53,6 @@ public class BinPackLag2 {
                 k8s.apps().deployments().inNamespace("default").withName("latency").scale(neededsize);
                 log.info("I have Upscaled group {} you should have {}", "testgroup1", neededsize);
             }
-
             } else if (replicasForscale == 0) {
                 if (metadataConsumer == null) {
                     KafkaConsumerConfig config = KafkaConsumerConfig.fromEnv();
