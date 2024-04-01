@@ -1,4 +1,5 @@
 
+import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -92,20 +93,26 @@ public class BinPackState2 {
 //                }
 
 
+
+
             }
         }
 
 
-        if (assignmentViolatesTheSLA()) {
-            if (metadataConsumer == null) {
+        if (assignmentViolatesTheSLA2()) {
+           /* if (metadataConsumer == null) {
                 KafkaConsumerConfig config = KafkaConsumerConfig.fromEnv();
                 Properties props = KafkaConsumerConfig.createProperties(config);
+                props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG,
+                        "org.apache.kafka.common.serialization.StringDeserializer");
+                props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
+                        "org.apache.kafka.common.serialization.StringDeserializer");
                 metadataConsumer = new KafkaConsumer<>(props);
-            }
+                metadataConsumer.enforceRebalance();
+                currentAssignment = tempAssignment;
+            }*/
 
-            currentAssignment = tempAssignment;
-           // currentAssignment = assignment;
-           // metadataConsumer.enforceRebalance();
+
 
             action = "REASS";
         }
@@ -242,7 +249,7 @@ public class BinPackState2 {
     }
 
 
-    private static  boolean assignmentViolatesTheSLA() {
+  /*  private static  boolean assignmentViolatesTheSLA() {
         for (Consumer cons : currentAssignment) {
             if (cons.getRemainingLagCapacity() <  (long) (wsla*200*.9f)||
                     cons.getRemainingArrivalCapacity() < 200f*0.9f){
@@ -251,6 +258,26 @@ public class BinPackState2 {
         }
         return false;
     }
+*/
 
+
+    private static boolean assignmentViolatesTheSLA2() {
+
+        List<Partition> partsReset = new ArrayList<>(ArrivalProducer.topicpartitions);
+        for (Consumer cons : currentAssignment) {
+            double sumPartitionsArrival = 0;
+            double sumPartitionsLag = 0;
+            for (Partition p : cons.getAssignedPartitions()) {
+                sumPartitionsArrival += partsReset.get(p.getId()).getArrivalRate();
+                sumPartitionsLag += partsReset.get(p.getId()).getLag();
+            }
+
+            if (sumPartitionsLag  > ( wsla * 200  * .9f)
+                    || sumPartitionsArrival > 200* 0.9f) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 }

@@ -27,6 +27,20 @@ public class BinPackLag2 {
 
     private static KafkaConsumer<byte[], byte[]> metadataConsumer;
 
+    static double mu = 200.0;
+
+
+
+    static {
+        currentAssignment.add(new Consumer("0", (long) (mu * wsla * .9),
+                mu * .9));
+        for (Partition p : ArrivalProducer.topicpartitions) {
+            currentAssignment.get(0).assignPartition(p);
+        }
+    }
+
+
+
 
 
 
@@ -210,10 +224,30 @@ public class BinPackLag2 {
 
 
 
-    private static  boolean assignmentViolatesTheSLA() {
+   /* private static  boolean assignmentViolatesTheSLA() {
         for (Consumer cons : currentAssignment) {
             if (cons.getRemainingLagCapacity() <  (long) (wsla*200*.9f)||
                     cons.getRemainingArrivalCapacity() < 200f*0.9f){
+                return true;
+            }
+        }
+        return false;
+    }*/
+
+
+    private static boolean assignmentViolatesTheSLA2() {
+
+        List<Partition> partsReset = new ArrayList<>(ArrivalProducer.topicpartitions);
+        for (Consumer cons : currentAssignment) {
+            double sumPartitionsArrival = 0;
+            double sumPartitionsLag = 0;
+            for (Partition p : cons.getAssignedPartitions()) {
+                sumPartitionsArrival += partsReset.get(p.getId()).getArrivalRate();
+                sumPartitionsLag += partsReset.get(p.getId()).getLag();
+            }
+
+            if (sumPartitionsLag  > ( wsla * 200  * .9f)
+                    || sumPartitionsArrival > 200* 0.9f) {
                 return true;
             }
         }
