@@ -66,35 +66,8 @@ public class BinPackState2 {
             if (replicasForscaled > 0) {
                action = "down";
                 log.info("We have to downscale  group by {} {}", "testgroup1", replicasForscaled);
-
                 currentAssignment = assignment;
-
                 return;
-
-
-                //size = neededsized;
-
-/*
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try (final KubernetesClient k8s = new KubernetesClientBuilder().build() *//*DefaultKubernetesClient()*//*) {
-                            k8s.apps().deployments().inNamespace("default").withName("latency").scale(neededsized);
-                            log.info("I have downscaled group {} you should have {}", "testgroup1", neededsized);
-                        }
-
-                    }
-                }).start();*/
-
-
-//                try (final KubernetesClient k8s = new KubernetesClientBuilder().build()) {
-//                    k8s.apps().deployments().inNamespace("default").withName("latency").scale(neededsized);
-//                    log.info("I have downscaled group {} you should have {}", "testgroup1", neededsized);
-//                }
-
-
-
-
             }
         }
 

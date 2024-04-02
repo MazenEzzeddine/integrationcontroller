@@ -1,6 +1,7 @@
 
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClientBuilder;
+import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -71,7 +72,12 @@ public class BinPackLag2 {
                 if (metadataConsumer == null) {
                     KafkaConsumerConfig config = KafkaConsumerConfig.fromEnv();
                     Properties props = KafkaConsumerConfig.createProperties(config);
+                    props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG,
+                            "org.apache.kafka.common.serialization.StringDeserializer");
+                    props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
+                            "org.apache.kafka.common.serialization.StringDeserializer");
                     metadataConsumer = new KafkaConsumer<>(props);
+                    metadataConsumer.enforceRebalance();
                 }
                 currentAssignment = assignment;
                 metadataConsumer.enforceRebalance();
@@ -89,15 +95,7 @@ public class BinPackLag2 {
                 }
                 currentAssignment = assignment;
             }
-        } /*else if (BinPackState2.action.equals("REASS")) {
-            if (metadataConsumer == null) {
-                KafkaConsumerConfig config = KafkaConsumerConfig.fromEnv();
-                Properties props = KafkaConsumerConfig.createProperties(config);
-                metadataConsumer = new KafkaConsumer<>(props);
-            }
-            currentAssignment = assignment;
-            metadataConsumer.enforceRebalance();
-        }*/
+        }
         log.info("===================================");
     }
 
@@ -111,21 +109,21 @@ public class BinPackLag2 {
         float fraction = 0.9f;
 
         for (Partition partition : parts) {
-            if (partition.getLag() > 200*wsla * fraction/*dynamicAverageMaxConsumptionRate*wsla*/) {
+            if (partition.getLag() > 200*wsla * fraction) {
                 log.info("Since partition {} has lag {} higher than consumer capacity times wsla {}" +
-                        " we are truncating its lag", partition.getId(), partition.getLag(), 200*wsla* fraction/*dynamicAverageMaxConsumptionRate*wsla*/);
-                partition.setLag((long)(200*wsla* fraction/*dynamicAverageMaxConsumptionRate*wsla*/));
+                        " we are truncating its lag", partition.getId(), partition.getLag(), 200*wsla* fraction);
+                partition.setLag((long)(200*wsla* fraction));
             }
         }
         //if a certain partition has an arrival rate  higher than R  set its arrival rate  to R
         //that should not happen in a well partionned topic
         for (Partition partition : parts) {
-            if (partition.getArrivalRate() > 200 *fraction/*dynamicAverageMaxConsumptionRate*wsla*/) {
+            if (partition.getArrivalRate() > 200 *fraction) {
                 log.info("Since partition {} has arrival rate {} higher than consumer service rate {}" +
                                 " we are truncating its arrival rate", partition.getId(),
                         String.format("%.2f", partition.getArrivalRate()),
-                        String.format("%.2f",200f *fraction /*dynamicAverageMaxConsumptionRate*wsla*/));
-                partition.setArrivalRate(200f*fraction /*dynamicAverageMaxConsumptionRate*wsla*/);
+                        String.format("%.2f",200f *fraction ));
+                partition.setArrivalRate(200f*fraction );
             }
         }
         //start the bin pack FFD with sort
@@ -235,7 +233,7 @@ public class BinPackLag2 {
     }*/
 
 
-    private static boolean assignmentViolatesTheSLA2() {
+   /* private static boolean assignmentViolatesTheSLA2() {
 
         List<Partition> partsReset = new ArrayList<>(ArrivalProducer.topicpartitions);
         for (Consumer cons : currentAssignment) {
@@ -252,7 +250,7 @@ public class BinPackLag2 {
             }
         }
         return false;
-    }
+    }*/
 
 
 }
