@@ -38,26 +38,7 @@ public class BinPackState2 {
             action = "up";
             //TODO IF and Else IF can be in the same logic
             log.info("We have to upscale  group1 by {}", replicasForscale);
-           // neededsize=5;
-            //size = neededsize;
-/*            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try (final KubernetesClient k8s = new KubernetesClientBuilder().build()DefaultKubernetesClient()) {
-                        k8s.apps().deployments().inNamespace("default").withName("latency").scale(neededsize);
-                        log.info("I have Upscaled group {} you should have {}", "testgroup1", neededsize);
-                    }
-                }
-            }).start();*/
-
-//            try (final KubernetesClient k8s = new KubernetesClientBuilder().build() ) {
-//                k8s.apps().deployments().inNamespace("default").withName("latency").scale(neededsize);
-//                log.info("I have Upscaled group {} you should have {}", "testgroup1", neededsize);
-//            }
-
-
             currentAssignment = assignment;
-
             return;
 
         } else {
@@ -73,20 +54,6 @@ public class BinPackState2 {
 
 
         if (assignmentViolatesTheSLA2()) {
-           /* if (metadataConsumer == null) {
-                KafkaConsumerConfig config = KafkaConsumerConfig.fromEnv();
-                Properties props = KafkaConsumerConfig.createProperties(config);
-                props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG,
-                        "org.apache.kafka.common.serialization.StringDeserializer");
-                props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
-                        "org.apache.kafka.common.serialization.StringDeserializer");
-                metadataConsumer = new KafkaConsumer<>(props);
-                metadataConsumer.enforceRebalance();
-                currentAssignment = tempAssignment;
-            }*/
-
-
-
             action = "REASS";
         }
         log.info("===================================");
@@ -148,8 +115,6 @@ public class BinPackState2 {
             if (j == parts.size())
                 break;
         }
-
-
         assignment = consumers;
         tempAssignment = consumers;
         log.info(" The BP up scaler recommended for group {} {}", "testgroup1", consumers.size());
@@ -213,10 +178,7 @@ public class BinPackState2 {
                 break;
         }
 
-
         assignment = consumers;
-
-
         log.info(" The BP down scaler recommended  for group {} {}", "testgroup1", consumers.size());
         return consumers.size();
     }
@@ -235,7 +197,6 @@ public class BinPackState2 {
 
 
     private static boolean assignmentViolatesTheSLA2() {
-
         List<Partition> partsReset = new ArrayList<>(ArrivalProducer.topicpartitions);
         for (Consumer cons : currentAssignment) {
             double sumPartitionsArrival = 0;
