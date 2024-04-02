@@ -38,7 +38,7 @@ public class BinPackState2 {
             action = "up";
             //TODO IF and Else IF can be in the same logic
             log.info("We have to upscale  group1 by {}", replicasForscale);
-            currentAssignment = assignment;
+            //currentAssignment = assignment;
             return;
 
         } else {
@@ -47,7 +47,7 @@ public class BinPackState2 {
             if (replicasForscaled > 0) {
                action = "down";
                 log.info("We have to downscale  group by {} {}", "testgroup1", replicasForscaled);
-                currentAssignment = assignment;
+                //currentAssignment = assignment;
                 return;
             }
         }
@@ -69,9 +69,9 @@ public class BinPackState2 {
         float fraction = 0.9f;
 
         for (Partition partition : parts) {
-            if (partition.getLag() > 200*wsla * fraction/*dynamicAverageMaxConsumptionRate*wsla*/) {
+            if (partition.getLag() > 200*wsla * fraction) {
                 log.info("Since partition {} has lag {} higher than consumer capacity times wsla {}" +
-                        " we are truncating its lag", partition.getId(), partition.getLag(), 200*wsla* fraction/*dynamicAverageMaxConsumptionRate*wsla*/);
+                        " we are truncating its lag", partition.getId(), partition.getLag(), 200*wsla* fraction);
                 partition.setLag((long)(200*wsla* fraction/*dynamicAverageMaxConsumptionRate*wsla*/));
             }
         }
@@ -94,7 +94,7 @@ public class BinPackState2 {
             consumers.clear();
             for (int t = 0; t < consumerCount; t++) {
                 consumers.add(new Consumer((String.valueOf(t)),  (long)(200*wsla*fraction),
-                        200*fraction/*dynamicAverageMaxConsumptionRate*wsla*/));
+                        200*fraction));
             }
 
             for (j = 0; j < parts.size(); j++) {

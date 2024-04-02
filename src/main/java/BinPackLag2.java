@@ -215,7 +215,6 @@ public class BinPackLag2 {
             if (j == parts.size())
                 break;
         }
-
         log.info(" The BP down scaler recommended  for group {} {}", "testgroup1", consumers.size());
         return consumers.size();
     }
