@@ -51,8 +51,6 @@ public class BinPackState2 {
                 return;
             }
         }
-
-
         if (assignmentViolatesTheSLA2()) {
             action = "REASS";
         }
@@ -72,18 +70,18 @@ public class BinPackState2 {
             if (partition.getLag() > 200*wsla * fraction) {
                 log.info("Since partition {} has lag {} higher than consumer capacity times wsla {}" +
                         " we are truncating its lag", partition.getId(), partition.getLag(), 200*wsla* fraction);
-                partition.setLag((long)(200*wsla* fraction/*dynamicAverageMaxConsumptionRate*wsla*/));
+                partition.setLag((long)(200*wsla* fraction));
             }
         }
         //if a certain partition has an arrival rate  higher than R  set its arrival rate  to R
         //that should not happen in a well partionned topic
         for (Partition partition : parts) {
-            if (partition.getArrivalRate() > 200 *fraction/*dynamicAverageMaxConsumptionRate*wsla*/) {
+            if (partition.getArrivalRate() > 200 *fraction) {
                 log.info("Since partition {} has arrival rate {} higher than consumer service rate {}" +
                                 " we are truncating its arrival rate", partition.getId(),
                         String.format("%.2f", partition.getArrivalRate()),
-                        String.format("%.2f",200f *fraction /*dynamicAverageMaxConsumptionRate*wsla*/));
-                partition.setArrivalRate(200f*fraction /*dynamicAverageMaxConsumptionRate*wsla*/);
+                        String.format("%.2f",200f *fraction ));
+                partition.setArrivalRate(200f*fraction );
             }
         }
         //start the bin pack FFD with sort
@@ -147,7 +145,6 @@ public class BinPackState2 {
                 partition.setArrivalRate(fractiondynamicAverageMaxConsumptionRate);
             }
         }
-        //start the bin pack FFD with sort
         Collections.sort(parts, Collections.reverseOrder());
         while (true) {
             int j;
@@ -177,7 +174,6 @@ public class BinPackState2 {
             if (j == parts.size())
                 break;
         }
-
         assignment = consumers;
         log.info(" The BP down scaler recommended  for group {} {}", "testgroup1", consumers.size());
         return consumers.size();
