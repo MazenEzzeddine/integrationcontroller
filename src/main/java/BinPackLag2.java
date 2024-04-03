@@ -20,7 +20,7 @@ public class BinPackLag2 {
     //0.5 WSLA is reached around 85 events/sec
  static double wsla = 0.5;
 
-    static double rebTime= 2.0;
+    static double rebTime= 0.05;//2.0;
 
 
     static List<Consumer> assignment = new ArrayList<Consumer>();

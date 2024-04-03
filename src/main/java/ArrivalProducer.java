@@ -25,24 +25,33 @@ public class ArrivalProducer {
     }
 
 
+
     public static void callForArrivals() {
-        ManagedChannel managedChannel = ManagedChannelBuilder.forAddress("arrivalservice", 5002)
+        ManagedChannel managedChannel = ManagedChannelBuilder.forAddress("arrivalservice",
+                        5002)
                 .usePlaintext()
                 .build();
-        ArrivalServiceGrpc.ArrivalServiceBlockingStub  arrivalServiceBlockingStub =
+        ArrivalServiceGrpc.ArrivalServiceBlockingStub arrivalServiceBlockingStub =
                 ArrivalServiceGrpc.newBlockingStub(managedChannel);
-        ArrivalRequest request = ArrivalRequest.newBuilder().setArrivalrequest("Give me the Assignment plz").build();
-        ArrivalResponse reply = arrivalServiceBlockingStub.arrivalRate(request);
+        ArrivalRequest request = ArrivalRequest.newBuilder()
+                .setArrivalrequest("Give me the arrival rate plz").build();
+        ArrivalResponse reply = arrivalServiceBlockingStub.consumptionRate(request);
         log.info("Arrival from the producer is {}", reply);
         totalArrivalrate = reply.getArrival();
         double partitionArrival = reply.getArrival()/5.0;
         log.info("Arrival into each partition is {}", partitionArrival);
         for (int i = 0; i < 5; i++) {
             topicpartitions.get(i).setArrivalRate(partitionArrival);
-            //topicpartitions.get(i).setLag((long)partitionArrival*5);
         }
+
+
         managedChannel.shutdown();
     }
+
+
+
+
+
 
 
 /*    public static void callForConsumers() {
