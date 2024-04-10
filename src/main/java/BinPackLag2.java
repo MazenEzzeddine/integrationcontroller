@@ -77,7 +77,7 @@ public class BinPackLag2 {
                     props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
                             "org.apache.kafka.common.serialization.StringDeserializer");
                     metadataConsumer = new KafkaConsumer<>(props);
-                    metadataConsumer.enforceRebalance();
+                    //metadataConsumer.enforceRebalance();
                 }
                 currentAssignment = assignment;
                 metadataConsumer.enforceRebalance();
