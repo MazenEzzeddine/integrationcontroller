@@ -22,8 +22,8 @@ public class BinPackState2 {
 
 
     static List<Consumer> assignment = new ArrayList<Consumer>();
-    static List<Consumer> currentAssignment = assignment;
-    static List<Consumer> tempAssignment = assignment;
+    static List<Consumer> currentAssignment = new ArrayList<Consumer>();
+    static List<Consumer> tempAssignment = new ArrayList<Consumer>();
 
 
     private static KafkaConsumer<byte[], byte[]> metadataConsumer;
@@ -47,7 +47,6 @@ public class BinPackState2 {
             if (replicasForscaled > 0) {
                action = "down";
                 log.info("We have to downscale  group by {} {}", "testgroup1", replicasForscaled);
-                //currentAssignment = assignment;
                 return;
             }
         }
@@ -193,7 +192,22 @@ public class BinPackState2 {
 
 
     private static boolean assignmentViolatesTheSLA2() {
+
         List<Partition> partsReset = new ArrayList<>(ArrivalProducer.topicpartitions);
+
+        float   fraction = 0.9f;
+        for (Partition partition : partsReset) {
+            if (partition.getLag() > 200f * wsla * fraction) {
+                partition.setLag((long) (200f * wsla * fraction));
+            }
+        }
+
+        for (Partition partition : partsReset) {
+            if (partition.getArrivalRate() > 200f * fraction) {
+                partition.setArrivalRate(200f * fraction );
+            }
+        }
+
         for (Consumer cons : currentAssignment) {
             double sumPartitionsArrival = 0;
             double sumPartitionsLag = 0;
