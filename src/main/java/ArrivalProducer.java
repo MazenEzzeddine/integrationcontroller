@@ -35,7 +35,7 @@ public class ArrivalProducer {
                 ArrivalServiceGrpc.newBlockingStub(managedChannel);
         ArrivalRequest request = ArrivalRequest.newBuilder()
                 .setArrivalrequest("Give me the arrival rate plz").build();
-        ArrivalResponse reply = arrivalServiceBlockingStub.consumptionRate(request);
+        ArrivalResponse reply = arrivalServiceBlockingStub.arrivalRate(request);
         log.info("Arrival from the producer is {}", reply);
         totalArrivalrate = reply.getArrival();
         double partitionArrival = reply.getArrival()/5.0;

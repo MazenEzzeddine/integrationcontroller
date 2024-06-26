@@ -26,7 +26,7 @@ public class BinPackState2 {
     static List<Consumer> tempAssignment = new ArrayList<Consumer>();
 
 
-    private static KafkaConsumer<byte[], byte[]> metadataConsumer;
+   // private static KafkaConsumer<byte[], byte[]> metadataConsumer;
 
     public  static void scaleAsPerBinPack() {
         action = "none";
