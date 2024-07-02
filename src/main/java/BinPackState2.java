@@ -22,11 +22,11 @@ public class BinPackState2 {
 
 
     static List<Consumer> assignment = new ArrayList<Consumer>();
-    static List<Consumer> currentAssignment = assignment;
-    static List<Consumer> tempAssignment = assignment;
+    static List<Consumer> currentAssignment = new ArrayList<Consumer>();
+    static List<Consumer> tempAssignment = new ArrayList<Consumer>();
 
 
-    private static KafkaConsumer<byte[], byte[]> metadataConsumer;
+   // private static KafkaConsumer<byte[], byte[]> metadataConsumer;
 
     public  static void scaleAsPerBinPack() {
         action = "none";
@@ -47,7 +47,6 @@ public class BinPackState2 {
             if (replicasForscaled > 0) {
                action = "down";
                 log.info("We have to downscale  group by {} {}", "testgroup1", replicasForscaled);
-                //currentAssignment = assignment;
                 return;
             }
         }
@@ -62,7 +61,7 @@ public class BinPackState2 {
         log.info(" shall we upscale group {}", "testgroup1");
         List<Consumer> consumers = new ArrayList<>();
         int consumerCount = 1;
-        List<Partition> parts = new ArrayList<>(ArrivalProducer.topicpartitions);
+        List<Partition> parts = new ArrayList<>(ArrivalRates.topicpartitions);
 
         float fraction = 0.9f;
 
@@ -123,7 +122,7 @@ public class BinPackState2 {
         log.info(" shall we down scale group {} ", "testgroup1");
         List<Consumer> consumers = new ArrayList<>();
         int consumerCount = 1;
-        List<Partition> parts = new ArrayList<>(ArrivalProducer.topicpartitions);
+        List<Partition> parts = new ArrayList<>(ArrivalRates.topicpartitions);
         double fractiondynamicAverageMaxConsumptionRate = 200*0.4;
         for (Partition partition : parts) {
             if (partition.getLag() > fractiondynamicAverageMaxConsumptionRate*wsla) {
@@ -193,7 +192,22 @@ public class BinPackState2 {
 
 
     private static boolean assignmentViolatesTheSLA2() {
-        List<Partition> partsReset = new ArrayList<>(ArrivalProducer.topicpartitions);
+
+        List<Partition> partsReset = new ArrayList<>(ArrivalRates.topicpartitions);
+
+        float   fraction = 0.9f;
+        for (Partition partition : partsReset) {
+            if (partition.getLag() > 200f * wsla * fraction) {
+                partition.setLag((long) (200f * wsla * fraction));
+            }
+        }
+
+        for (Partition partition : partsReset) {
+            if (partition.getArrivalRate() > 200f * fraction) {
+                partition.setArrivalRate(200f * fraction );
+            }
+        }
+
         for (Consumer cons : currentAssignment) {
             double sumPartitionsArrival = 0;
             double sumPartitionsLag = 0;

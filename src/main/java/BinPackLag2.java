@@ -24,7 +24,7 @@ public class BinPackLag2 {
 
 
     static List<Consumer> assignment = new ArrayList<Consumer>();
-    static List<Consumer> currentAssignment = assignment;
+    static List<Consumer> currentAssignment  = new ArrayList<Consumer>();
 
     private static KafkaConsumer<byte[], byte[]> metadataConsumer;
 
@@ -63,7 +63,7 @@ public class BinPackLag2 {
                 log.info("We have to upscale  group1 by {}", replicasForscale);
                 BinPackState2.size = neededsize;
                 LastUpScaleDecision = Instant.now();
-                currentAssignment = assignment;
+                currentAssignment = List.copyOf(assignment);
                 try (final KubernetesClient k8s = new KubernetesClientBuilder().build() ) {
                 k8s.apps().deployments().inNamespace("default").withName("latency").scale(neededsize);
                 log.info("I have Upscaled group {} you should have {}", "testgroup1", neededsize);
@@ -79,7 +79,7 @@ public class BinPackLag2 {
                     metadataConsumer = new KafkaConsumer<>(props);
                     //metadataConsumer.enforceRebalance();
                 }
-                currentAssignment = assignment;
+                currentAssignment = List.copyOf(assignment);
                 metadataConsumer.enforceRebalance();
             }
         } else if (BinPackState2.action.equals("down")) {
@@ -93,7 +93,7 @@ public class BinPackLag2 {
                     k8s.apps().deployments().inNamespace("default").withName("latency").scale(neededsized);
                     log.info("I have downscaled group {} you should have {}", "testgroup1", neededsized);
                 }
-                currentAssignment = assignment;
+                currentAssignment = List.copyOf(assignment);
             }
         }
         log.info("===================================");
@@ -155,6 +155,7 @@ public class BinPackLag2 {
             if (j == parts.size())
                 break;
         }
+        assignment= consumers;
         log.info(" The BP up scaler recommended for group {} {}", "testgroup1", consumers.size());
         return consumers.size();
     }
@@ -216,6 +217,7 @@ public class BinPackLag2 {
                 break;
         }
         log.info(" The BP down scaler recommended  for group {} {}", "testgroup1", consumers.size());
+        assignment = consumers;
         return consumers.size();
     }
 
