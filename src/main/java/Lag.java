@@ -53,7 +53,8 @@ public class Lag {
             long latestOffset = latestOffsets.get(t).offset();
             long committedoffset = committedOffsets.get(t).offset();
             partitions.get(i).setLag(latestOffset - committedoffset);
-            ArrivalProducer.topicpartitions.get(i).setLag(latestOffset-committedoffset);
+           // ArrivalProducer.topicpartitions.get(i).setLag(latestOffset-committedoffset);
+            ArrivalRates.topicpartitions.get(i).setLag(latestOffset-committedoffset);
             totalLag += partitions.get(i).getLag();
             log.info("partition {} has lag {}", i, partitions.get(i).getLag());
         }
