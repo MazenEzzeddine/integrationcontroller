@@ -4,14 +4,9 @@ import org.apache.logging.log4j.Logger;
 import java.util.concurrent.ExecutionException;
 
 public class Controller implements Runnable {
-
     private static final Logger log = LogManager.getLogger(Controller.class);
-     static BinPackState2 bps;
+    static BinPackState2 bps;
     static BinPackLag2 bpl;
-
-
-
-
     private static void initialize() throws InterruptedException, ExecutionException {
         bps = new BinPackState2();
         bpl = new BinPackLag2();
@@ -52,21 +47,15 @@ public class Controller implements Runnable {
     }*/
 
 
-
-
-
-
-
-
     private static void scaleLogicTail2() throws InterruptedException, ExecutionException {
         if (Lag.queryConsumerGroup() != BinPackState2.size) {
             log.info("no action, previous action is not seen yet");
             return;
         }
-            BinPackState2.scaleAsPerBinPack();
-            if (BinPackState2.action.equals("up") || BinPackState2.action.equals("down")
-                    || BinPackState2.action.equals("REASS") ) {
-                BinPackLag2.scaleAsPerBinPack();
+        BinPackState2.scaleAsPerBinPack();
+        if (BinPackState2.action.equals("up") || BinPackState2.action.equals("down")
+                || BinPackState2.action.equals("REASS")) {
+            BinPackLag2.scaleAsPerBinPack();
         }
     }
 

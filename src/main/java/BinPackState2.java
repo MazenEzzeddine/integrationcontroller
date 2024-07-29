@@ -17,15 +17,10 @@ public class BinPackState2 {
     public   Instant LastUpScaleDecision = Instant.now();
     //0.5 WSLA is reached around 85 events/sec
     static double wsla = 0.5;
-
     static String action = "none";
-
-
     static List<Consumer> assignment = new ArrayList<Consumer>();
     static List<Consumer> currentAssignment = new ArrayList<Consumer>();
     static List<Consumer> tempAssignment = new ArrayList<Consumer>();
-
-
    // private static KafkaConsumer<byte[], byte[]> metadataConsumer;
 
     public  static void scaleAsPerBinPack() {
@@ -40,7 +35,6 @@ public class BinPackState2 {
             log.info("We have to upscale  group1 by {}", replicasForscale);
             //currentAssignment = assignment;
             return;
-
         } else {
             int neededsized = binPackAndScaled();
             int replicasForscaled = size - neededsized;
@@ -61,10 +55,9 @@ public class BinPackState2 {
         log.info(" shall we upscale group {}", "testgroup1");
         List<Consumer> consumers = new ArrayList<>();
         int consumerCount = 1;
+        // List<Partition> parts = new ArrayList<>(ArrivalProducer.topicpartitions);
         List<Partition> parts = new ArrayList<>(ArrivalRates.topicpartitions);
-
         float fraction = 0.9f;
-
         for (Partition partition : parts) {
             if (partition.getLag() > 200*wsla * fraction) {
                 log.info("Since partition {} has lag {} higher than consumer capacity times wsla {}" +
@@ -85,7 +78,6 @@ public class BinPackState2 {
         }
         //start the bin pack FFD with sort
         Collections.sort(parts, Collections.reverseOrder());
-
         while (true) {
             int j;
             consumers.clear();
@@ -122,6 +114,7 @@ public class BinPackState2 {
         log.info(" shall we down scale group {} ", "testgroup1");
         List<Consumer> consumers = new ArrayList<>();
         int consumerCount = 1;
+        //List<Partition> parts = new ArrayList<>(ArrivalProducer.topicpartitions);
         List<Partition> parts = new ArrayList<>(ArrivalRates.topicpartitions);
         double fractiondynamicAverageMaxConsumptionRate = 200*0.4;
         for (Partition partition : parts) {
@@ -192,7 +185,7 @@ public class BinPackState2 {
 
 
     private static boolean assignmentViolatesTheSLA2() {
-
+        //List<Partition> parts = new ArrayList<>(ArrivalProducer.topicpartitions);
         List<Partition> partsReset = new ArrayList<>(ArrivalRates.topicpartitions);
 
         float   fraction = 0.9f;

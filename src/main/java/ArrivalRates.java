@@ -14,14 +14,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 public class ArrivalRates {
-
-
     private static final Logger log = LogManager.getLogger(ArrivalRates.class);
-
-
     static double processingRate = 0;
-
-
     static ArrayList<Partition> topicpartitions;
     static float totalArrivalrate;
 
@@ -32,10 +26,7 @@ public class ArrivalRates {
         }
 
     }
-
     static  HttpClient client = HttpClient.newHttpClient();
-
-
     static void arrivalRateTopic1() throws ExecutionException, InterruptedException {
         //HttpClient client = HttpClient.newHttpClient();
         ////////////////////////////////////////////////////
@@ -93,16 +84,13 @@ public class ArrivalRates {
                // e.printStackTrace();
                 return;
             }
-
             topicpartitions.get(partition).setArrivalRate(partitionArrivalRate);
-
-
-
             totalarrivalstopic1 += partitionArrivalRate;
             log.info("arrival rate into partition {} is {}", partition,  partitionArrivalRate);
             partition++;
         }
         log.info("totalArrivalRate for  topic 1 {}", totalarrivalstopic1);
+
         partition = 0;
         double totallag = 0.0;
         long partitionLag = 0L;
@@ -113,30 +101,18 @@ public class ArrivalRates {
                 //e.printStackTrace();
                 return;
             }
-
             topicpartitions.get(partition).setLag(partitionLag);
-
-
             totallag += partitionLag;
             log.info("lag of partition {} is {}", partition,  partitionLag);
-
             partition++;
         }
-
         log.info("totalLag for topic 1 {}", totallag);
-
-        queryLatency();
-
+        //queryLatency();
         log.info("******************");
-
     }
 
     private static void queryLatency()  {
-
-
      //   HttpClient client = HttpClient.newHttpClient();
-
-
         List<URI> latencies = new ArrayList<>();
         try {
             latencies = Arrays.asList(
@@ -146,8 +122,6 @@ public class ArrivalRates {
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
-
-
         List<CompletableFuture<String>> latenciesFuture = latencies.stream()
                 .map(target -> client
                         .sendAsync(
@@ -165,7 +139,7 @@ public class ArrivalRates {
                 if (lat == 0.0) return;
                 if (index == 0) {
                     //log.info("processing latency is {}", lat);
-                    //processingRate = 1000.0/lat;
+                    processingRate = 1000.0/lat;
                     log.info("processing rate avg over time  percentile over 10s (mu) is {}", processingRate);
                 } else {
                     processingRate = 1000.0/lat;
