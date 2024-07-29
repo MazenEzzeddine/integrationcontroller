@@ -48,7 +48,7 @@ public class BinPackLag2 {
   /*          ArrivalProducer.topicpartitions.get(i).setLag(ArrivalProducer.topicpartitions.get(i).getLag()
                     + (long) ((ArrivalProducer.totalArrivalrate * rebTime)/5.0));*/
 
-            ArrivalProducer.topicpartitions.get(i).setLag(ArrivalRates.topicpartitions.get(i).getLag()
+            ArrivalRates.topicpartitions.get(i).setLag(ArrivalRates.topicpartitions.get(i).getLag()
                     + (long) ((ArrivalRates.totalArrivalrate * rebTime)/5.0));
         }
 
