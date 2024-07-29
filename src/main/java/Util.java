@@ -26,8 +26,6 @@ public class Util {
         //json string from prometheus
         //{"status":"success","data":{"resultType":"vector","result":[{"metric":{"topic":"testtopic1"},"value":[1659006264.066,"144.05454545454546"]}]}}
         //log.info(json);
-
-
         try {
             JSONObject jsonObject = JSONObject.parseObject(json);
             JSONObject j2 = (JSONObject) jsonObject.get("data");
