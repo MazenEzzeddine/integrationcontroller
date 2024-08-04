@@ -209,8 +209,8 @@ public class BinPackState2 {
                 sumPartitionsLag += partsReset.get(p.getId()).getLag();
             }
 
-            if (sumPartitionsLag  > ( wsla * 200  * .9f)
-                    || sumPartitionsArrival > 200* 0.9f) {
+            if (sumPartitionsLag  > ( wsla * 200f  * .9f)
+                    || sumPartitionsArrival > 200f* 0.9f) {
                 return true;
             }
         }

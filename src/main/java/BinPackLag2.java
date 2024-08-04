@@ -228,7 +228,7 @@ public class BinPackLag2 {
 
    // it is not the currentAssignment
         for (Consumer cons : currentAssignment) {
-            if (cons.getRemainingLagCapacity() <  (long) (wsla*200*.9f)||
+            if (cons.getRemainingLagCapacity() < or =  (long) (wsla*200*.9f)||
                     cons.getRemainingArrivalCapacity() < 200f*0.9f){
                 return true;
             }
