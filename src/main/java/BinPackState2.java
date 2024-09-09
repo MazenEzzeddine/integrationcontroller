@@ -56,7 +56,7 @@ public class BinPackState2 {
         List<Consumer> consumers = new ArrayList<>();
         int consumerCount = 1;
         // List<Partition> parts = new ArrayList<>(ArrivalProducer.topicpartitions);
-        List<Partition> parts = new ArrayList<>(ArrivalRates.topicpartitions);
+        List<Partition> parts = new ArrayList<>(ArrivalProducer.topicpartitions);
         float fraction = 0.9f;
         for (Partition partition : parts) {
             if (partition.getLag() > 200*wsla * fraction) {
@@ -115,7 +115,7 @@ public class BinPackState2 {
         List<Consumer> consumers = new ArrayList<>();
         int consumerCount = 1;
         //List<Partition> parts = new ArrayList<>(ArrivalProducer.topicpartitions);
-        List<Partition> parts = new ArrayList<>(ArrivalRates.topicpartitions);
+        List<Partition> parts = new ArrayList<>(ArrivalProducer.topicpartitions);
         double fractiondynamicAverageMaxConsumptionRate = 200*0.4;
         for (Partition partition : parts) {
             if (partition.getLag() > fractiondynamicAverageMaxConsumptionRate*wsla) {
@@ -186,7 +186,7 @@ public class BinPackState2 {
 
     private static boolean assignmentViolatesTheSLA2() {
         //List<Partition> parts = new ArrayList<>(ArrivalProducer.topicpartitions);
-        List<Partition> partsReset = new ArrayList<>(ArrivalRates.topicpartitions);
+        List<Partition> partsReset = new ArrayList<>(ArrivalProducer.topicpartitions);
 
         float   fraction = 0.9f;
         for (Partition partition : partsReset) {

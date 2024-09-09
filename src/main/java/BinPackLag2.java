@@ -47,8 +47,8 @@ public class BinPackLag2 {
             //ArrivalRates
   /*          ArrivalProducer.topicpartitions.get(i).setLag(ArrivalProducer.topicpartitions.get(i).getLag()
                     + (long) ((ArrivalProducer.totalArrivalrate * rebTime)/5.0));*/
-            ArrivalRates.topicpartitions.get(i).setLag(ArrivalRates.topicpartitions.get(i).getLag()
-                    + (long) ((ArrivalRates.totalArrivalrate * rebTime)/5.0));
+            ArrivalProducer.topicpartitions.get(i).setLag(ArrivalProducer.topicpartitions.get(i).getLag()
+                    + (long) ((ArrivalProducer.totalArrivalrate * rebTime)/5.0));
         }
 
         if (BinPackState2.action.equals("up") || BinPackState2.action.equals("REASS")) {
@@ -102,7 +102,7 @@ public class BinPackLag2 {
         List<Consumer> consumers = new ArrayList<>();
         int consumerCount = 1;
        // List<Partition> parts = new ArrayList<>(ArrivalProducer.topicpartitions);
-        List<Partition> parts = new ArrayList<>(ArrivalRates.topicpartitions);
+        List<Partition> parts = new ArrayList<>(ArrivalProducer.topicpartitions);
 
 
         float fraction = 0.9f;
@@ -164,7 +164,7 @@ public class BinPackLag2 {
         List<Consumer> consumers = new ArrayList<>();
         int consumerCount = 1;
        // List<Partition> parts = new ArrayList<>(ArrivalProducer.topicpartitions);
-        List<Partition> parts = new ArrayList<>(ArrivalRates.topicpartitions);
+        List<Partition> parts = new ArrayList<>(ArrivalProducer.topicpartitions);
 
         double fractiondynamicAverageMaxConsumptionRate = 200*0.4;
         for (Partition partition : parts) {
