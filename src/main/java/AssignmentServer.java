@@ -54,6 +54,8 @@ public class AssignmentServer implements Runnable {
     public static class AssignmentService extends AssignmentServiceGrpc.AssignmentServiceImplBase {
         @Override
         public void getAssignment(AssignmentRequest request, StreamObserver<AssignmentResponse> responseObserver) {
+
+            //Correct...
             if (BinPackLag2.currentAssignment.size() == 0) {
                 List<ConsumerGrpc> assignmentReply = new ArrayList<>();
                 for (int i = 0; i < 5; i++) {

@@ -55,7 +55,7 @@ public class BinPackState2 {
         log.info(" shall we upscale group {}", "testgroup1");
         List<Consumer> consumers = new ArrayList<>();
         int consumerCount = 1;
-        // List<Partition> parts = new ArrayList<>(ArrivalProducer.topicpartitions);
+        // List<Partition> parts = new ArrayList<>(ArrivalRates.topicpartitions);
         List<Partition> parts = new ArrayList<>(ArrivalRates.topicpartitions);
         float fraction = 0.9f;
         for (Partition partition : parts) {
@@ -114,7 +114,7 @@ public class BinPackState2 {
         log.info(" shall we down scale group {} ", "testgroup1");
         List<Consumer> consumers = new ArrayList<>();
         int consumerCount = 1;
-        //List<Partition> parts = new ArrayList<>(ArrivalProducer.topicpartitions);
+        //List<Partition> parts = new ArrayList<>(ArrivalRates.topicpartitions);
         List<Partition> parts = new ArrayList<>(ArrivalRates.topicpartitions);
         double fractiondynamicAverageMaxConsumptionRate = 200*0.4;
         for (Partition partition : parts) {
@@ -185,7 +185,7 @@ public class BinPackState2 {
 
 
     private static boolean assignmentViolatesTheSLA2() {
-        //List<Partition> parts = new ArrayList<>(ArrivalProducer.topicpartitions);
+        //List<Partition> parts = new ArrayList<>(ArrivalRates.topicpartitions);
         List<Partition> partsReset = new ArrayList<>(ArrivalRates.topicpartitions);
 
         float   fraction = 0.9f;
@@ -209,8 +209,8 @@ public class BinPackState2 {
                 sumPartitionsLag += partsReset.get(p.getId()).getLag();
             }
 
-            if (sumPartitionsLag  > ( wsla * 200  * .9f)
-                    || sumPartitionsArrival > 200* 0.9f) {
+            if (sumPartitionsLag  > ( wsla * 200f  * .9f)
+                    || sumPartitionsArrival > 200f* 0.9f) {
                 return true;
             }
         }

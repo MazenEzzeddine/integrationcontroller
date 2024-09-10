@@ -15,9 +15,9 @@ public class Controller implements Runnable {
         Thread.sleep(15 * 1000);
         while (true) {
             log.info("Querying Prometheus");
-            //ArrivalProducer.callForArrivals();
+          //  ArrivalProducer.callForArrivals();
             ArrivalRates.arrivalRateTopic1();
-            Lag.getCommittedLatestOffsetsAndLag();
+           // Lag.getCommittedLatestOffsetsAndLag();
             log.info("--------------------");
             log.info("--------------------");
             //scaleLogic();

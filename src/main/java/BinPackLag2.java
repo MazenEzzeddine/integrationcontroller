@@ -32,7 +32,7 @@ public class BinPackLag2 {
     static {
         currentAssignment.add(new Consumer("0", (long) (mu * wsla * .9),
                 mu * .9));
-        for (Partition p : ArrivalProducer.topicpartitions) {
+        for (Partition p : ArrivalRates.topicpartitions) {
             currentAssignment.get(0).assignPartition(p);
         }
     }
@@ -45,10 +45,14 @@ public class BinPackLag2 {
         for (int i = 0; i < 5; i++) {
 
             //ArrivalRates
-  /*          ArrivalProducer.topicpartitions.get(i).setLag(ArrivalProducer.topicpartitions.get(i).getLag()
+  /*          ArrivalRates.topicpartitions.get(i).setLag(ArrivalRates.topicpartitions.get(i).getLag()
                     + (long) ((ArrivalProducer.totalArrivalrate * rebTime)/5.0));*/
-            ArrivalRates.topicpartitions.get(i).setLag(ArrivalRates.topicpartitions.get(i).getLag()
-                    + (long) ((ArrivalRates.totalArrivalrate * rebTime)/5.0));
+           /* ArrivalRates.topicpartitions.get(i).setLag(ArrivalRates.topicpartitions.get(i).getLag()
+                    + (long) ((ArrivalProducer.totalArrivalrate * rebTime)/5.0));*/
+
+
+            ArrivalRates.topicpartitions.get(i).setLag(ArrivalRates.topicpartitions.get(i).getLag() +
+                    (long) (ArrivalRates.topicpartitions.get(i).getArrivalRate()*rebTime));
         }
 
         if (BinPackState2.action.equals("up") || BinPackState2.action.equals("REASS")) {
@@ -101,7 +105,7 @@ public class BinPackLag2 {
         log.info(" shall we upscale group {}", "testgroup1");
         List<Consumer> consumers = new ArrayList<>();
         int consumerCount = 1;
-       // List<Partition> parts = new ArrayList<>(ArrivalProducer.topicpartitions);
+       // List<Partition> parts = new ArrayList<>(ArrivalRates.topicpartitions);
         List<Partition> parts = new ArrayList<>(ArrivalRates.topicpartitions);
 
 
@@ -163,7 +167,7 @@ public class BinPackLag2 {
         log.info(" shall we down scale group {} ", "testgroup1");
         List<Consumer> consumers = new ArrayList<>();
         int consumerCount = 1;
-       // List<Partition> parts = new ArrayList<>(ArrivalProducer.topicpartitions);
+       // List<Partition> parts = new ArrayList<>(ArrivalRates.topicpartitions);
         List<Partition> parts = new ArrayList<>(ArrivalRates.topicpartitions);
 
         double fractiondynamicAverageMaxConsumptionRate = 200*0.4;
@@ -228,7 +232,7 @@ public class BinPackLag2 {
 
    // it is not the currentAssignment
         for (Consumer cons : currentAssignment) {
-            if (cons.getRemainingLagCapacity() <  (long) (wsla*200*.9f)||
+            if (cons.getRemainingLagCapacity() < or =  (long) (wsla*200*.9f)||
                     cons.getRemainingArrivalCapacity() < 200f*0.9f){
                 return true;
             }
@@ -239,7 +243,7 @@ public class BinPackLag2 {
 
    /* private static boolean assignmentViolatesTheSLA2() {
 
-        List<Partition> partsReset = new ArrayList<>(ArrivalProducer.topicpartitions);
+        List<Partition> partsReset = new ArrayList<>(ArrivalRates.topicpartitions);
         for (Consumer cons : currentAssignment) {
             double sumPartitionsArrival = 0;
             double sumPartitionsLag = 0;
