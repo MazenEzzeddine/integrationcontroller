@@ -21,7 +21,9 @@ public class Controller implements Runnable {
             log.info("--------------------");
             log.info("--------------------");
             //scaleLogic();
-            scaleLogicTail2();
+            //scaleLogicTail2();
+            scaleLogicTail3();
+
             log.info("Sleeping for 1 seconds");
             log.info("******************************************");
             log.info("******************************************");
@@ -58,6 +60,22 @@ public class Controller implements Runnable {
             BinPackLag2.scaleAsPerBinPack();
         }
     }
+
+
+
+
+    private static void scaleLogicTail3() throws InterruptedException, ExecutionException {
+        if (Lag.queryConsumerGroup() != BinPackState3.size) {
+            log.info("no action, previous action is not seen yet");
+            return;
+        }
+        BinPackState3.scaleAsPerBinPack();
+        if (BinPackState3.action.equals("up") || BinPackState3.action.equals("down")
+                || BinPackState3.action.equals("REASS")) {
+            BinPackLag3.scaleAsPerBinPack();
+        }
+    }
+
 
     @Override
     public void run() {

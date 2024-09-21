@@ -107,11 +107,11 @@ public class ArrivalRates {
             partition++;
         }
         log.info("totalLag for topic 1 {}", totallag);
-        //queryLatency();
+        queryLatency();
         log.info("******************");
     }
 
-    private static void queryLatency()  {
+   /* private static void queryLatency()  {
      //   HttpClient client = HttpClient.newHttpClient();
         List<URI> latencies = new ArrayList<>();
         try {
@@ -142,8 +142,8 @@ public class ArrivalRates {
                     processingRate = 1000.0/lat;
                     log.info("processing rate avg over time  percentile over 10s (mu) is {}", processingRate);
                 } else {
-                  /*  processingRate = 1000.0/lat;
-                    log.info("processing rate 95 percentile over 10s (mu) is {}", processingRate);*/
+                  *//*  processingRate = 1000.0/lat;
+                    log.info("processing rate 95 percentile over 10s (mu) is {}", processingRate);*//*
                 }
                 index++;
             } catch (Exception e) {
@@ -153,7 +153,65 @@ public class ArrivalRates {
             }
         }
     }
+*/
 
+
+    private static void queryLatency()  {
+
+
+        //   HttpClient client = HttpClient.newHttpClient();
+
+
+        List<URI> latencies = new ArrayList<>();
+        try {
+            latencies = Arrays.asList(
+                   /* new URI(Constants.processingLatencyAvg),
+                    new URI(Constants.processingLatencyPercentileAvg)*/
+                    new URI(Constants.pr)
+                    //new URI(Constants.events_latency_count)
+            );
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+
+
+        List<CompletableFuture<String>> latenciesFuture = latencies.stream()
+                .map(target -> client
+                        .sendAsync(
+                                HttpRequest.newBuilder(target).GET().build(),
+                                HttpResponse.BodyHandlers.ofString())
+                        .thenApply(HttpResponse::body))
+                .collect(Collectors.toList());
+
+        int index = 0;
+        double lat;
+
+        for (CompletableFuture<String> cf : latenciesFuture) {
+            //log.info("cf.get() {}", cf.get());
+            try {
+                lat = Util.parseJsonLatency(cf.get());
+                if (lat == 0.0 || Double.isNaN(lat)) return;
+                if (index == 0) {
+                    //log.info("processing latency is {}", lat);
+                    //sum  = lat;
+
+                    processingRate = lat;
+                    log.info("processing rate  is {}", processingRate);
+                }else {
+                    // count = lat;
+                    //log.info("processing rate 95 percentile over 10s (mu) is {}", processingRate);
+                }
+                index++;
+            } catch (Exception e) {
+                // e.printStackTrace();
+                // log.info("Exception occured")
+                return;
+            }
+        }
+
+        /*processingRate =  sum/count;
+        log.info("processing rate is {}",  processingRate);*/
+    }
 
 
 
@@ -163,12 +221,4 @@ public class ArrivalRates {
 }
 
 
-// avg(quantile_over_time(0.95, processingGauge[30s]))
 
-/*
-cf.get() {"status":"success","data":{"resultType":"vector","result":[{"metric":{"container":"latency","endpoint":"brom","instance":"10.100.3.75:8080",
-        "job":"default/demoobservabilitypodmonitor","namespace":"default","pod":"latency-557ffcdf4c-g8lwb"},"value":[1695891084.836,"4.950645903563316"]}]}}
-        cf.get() {"status":"success","data":{"resultType":"vector","result":[{"metric":
-        {"container":"latency","endpoint":"brom","instance":"10.100.3.75:8080","job":"default/demoobservabilitypodmonitor","namespace":"default",
-        "pod":"latency-557ffcdf4c-g8lwb"},
-        "value":[1695891084.837,"7.595981963283263"]}]}}*/

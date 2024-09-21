@@ -50,6 +50,10 @@ public class Constants {
             "avg_over_time(totallatencygauge%5B30s%5D)";*/
 
 
+    static String pr = "http://prometheus-operated:9090/api/v1/query?query=" +
+            "1000/(avg(rate(events_latency_sum[2s])/rate(events_latency_count[2s])))";
+
+
 
 }
 
