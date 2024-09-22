@@ -5,11 +5,11 @@ import java.util.concurrent.ExecutionException;
 
 public class Controller implements Runnable {
     private static final Logger log = LogManager.getLogger(Controller.class);
-    static BinPackState2 bps;
-    static BinPackLag2 bpl;
+/*    static BinPackState2 bps;
+    static BinPackLag2 bpl;*/
     private static void initialize() throws InterruptedException, ExecutionException {
-        bps = new BinPackState2();
-        bpl = new BinPackLag2();
+      /*  bps = new BinPackState2();
+        bpl = new BinPackLag2();*/
         Lag.readEnvAndCrateAdminClient();
         log.info("Warming 15  seconds.");
         Thread.sleep(15 * 1000);
@@ -22,7 +22,10 @@ public class Controller implements Runnable {
             log.info("--------------------");
             //scaleLogic();
             //scaleLogicTail2();
-            scaleLogicTail3();
+
+            if(ArrivalRates.processingRate != 0) {
+                scaleLogicTail3();
+            }
 
             log.info("Sleeping for 1 seconds");
             log.info("******************************************");

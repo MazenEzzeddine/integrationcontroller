@@ -197,6 +197,7 @@ public class BinPackLag3 {
             int j;
             consumers.clear();
             for (int t = 0; t < consumerCount; t++) {
+                //TO be Corrected // String.valueOf(t) fortunately does not affectr for now..
                 consumers.add(new Consumer((String.valueOf(consumerCount)),
                         (long)(fractiondynamicAverageMaxConsumptionRate*wsla),
                         fractiondynamicAverageMaxConsumptionRate));
