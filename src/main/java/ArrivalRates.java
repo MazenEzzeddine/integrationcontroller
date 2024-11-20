@@ -24,7 +24,6 @@ public class ArrivalRates {
         for (int i = 0; i <= 4; i++) {
             topicpartitions.add(new Partition(i, 0, 0));
         }
-
     }
     static  HttpClient client = HttpClient.newHttpClient();
     static void arrivalRateTopic1() throws ExecutionException, InterruptedException {
@@ -175,6 +174,10 @@ public class ArrivalRates {
         }
 
 
+
+
+
+
         List<CompletableFuture<String>> latenciesFuture = latencies.stream()
                 .map(target -> client
                         .sendAsync(
@@ -201,7 +204,7 @@ public class ArrivalRates {
                     // count = lat;
                     //log.info("processing rate 95 percentile over 10s (mu) is {}", processingRate);
                 }
-                index++;
+                index++; // why is that?
             } catch (Exception e) {
                 // e.printStackTrace();
                 // log.info("Exception occured")

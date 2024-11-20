@@ -7,9 +7,18 @@ public class Controller implements Runnable {
     private static final Logger log = LogManager.getLogger(Controller.class);
 /*    static BinPackState2 bps;
     static BinPackLag2 bpl;*/
+
+    static long  decisionIntervalms = 30000;
+
+
+
+
+
     private static void initialize() throws InterruptedException, ExecutionException {
       /*  bps = new BinPackState2();
         bpl = new BinPackLag2();*/
+
+        Constants.init();
         Lag.readEnvAndCrateAdminClient();
         log.info("Warming 15  seconds.");
         Thread.sleep(15 * 1000);
@@ -30,7 +39,7 @@ public class Controller implements Runnable {
             log.info("Sleeping for 1 seconds");
             log.info("******************************************");
             log.info("******************************************");
-            Thread.sleep(1000);
+            Thread.sleep(decisionIntervalms);
         }
     }
 
@@ -68,6 +77,8 @@ public class Controller implements Runnable {
 
 
     private static void scaleLogicTail3() throws InterruptedException, ExecutionException {
+
+        //TODO BinPackLag3.size()=> it is OK
         if (Lag.queryConsumerGroup() != BinPackState3.size) {
             log.info("no action, previous action is not seen yet");
             return;
@@ -84,9 +95,7 @@ public class Controller implements Runnable {
     public void run() {
         try {
             initialize();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        } catch (ExecutionException e) {
+        } catch (InterruptedException | ExecutionException e) {
             throw new RuntimeException(e);
         }
     }

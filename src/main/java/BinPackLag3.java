@@ -16,17 +16,16 @@ public class BinPackLag3 {
     //TODO give fup and fdown as paramters to the functions.
     private static final Logger log = LogManager.getLogger(BinPackLag3.class);
 
-    static   Instant LastUpScaleDecision = Instant.now();
+    static Instant LastUpScaleDecision = Instant.now();
     //0.5 WSLA is reached around 85 events/sec
- static double wsla = 0.5;
+    static double wsla = 0.5;
 
- static double rebTime= 0.05;//2.0;
+    static double rebTime = 0.05;//2.0;
     static List<Consumer> assignment = new ArrayList<Consumer>();
-    static List<Consumer> currentAssignment  = new ArrayList<Consumer>();
+    static List<Consumer> currentAssignment = new ArrayList<Consumer>();
     private static KafkaConsumer<byte[], byte[]> metadataConsumer;
 
     static double mu = 200.0;
-
 
 
     static {
@@ -38,9 +37,9 @@ public class BinPackLag3 {
     }
 
 
-    public static  void scaleAsPerBinPack() {
+    public static void scaleAsPerBinPack() {
 
-        log.info("Currently we have this number of consumers group {} {}","testgroup1", BinPackState2.size );
+        log.info("Currently we have this number of consumers group {} {}", "testgroup1", BinPackState2.size);
 
         for (int i = 0; i < 5; i++) {
 
@@ -52,7 +51,7 @@ public class BinPackLag3 {
 
 
             ArrivalRates.topicpartitions.get(i).setLag(ArrivalRates.topicpartitions.get(i).getLag() +
-                    (long) (ArrivalRates.topicpartitions.get(i).getArrivalRate()*rebTime));
+                    (long) (ArrivalRates.topicpartitions.get(i).getArrivalRate() * rebTime));
         }
 
         if (BinPackState3.action.equals("up") || BinPackState3.action.equals("REASS")) {
@@ -65,10 +64,10 @@ public class BinPackLag3 {
                 BinPackState3.size = neededsize;
                 LastUpScaleDecision = Instant.now();
                 currentAssignment = List.copyOf(assignment);
-                try (final KubernetesClient k8s = new KubernetesClientBuilder().build() ) {
-                k8s.apps().deployments().inNamespace("default").withName("latency").scale(neededsize);
-                log.info("I have Upscaled group {} you should have {}", "testgroup1", neededsize);
-            }
+                try (final KubernetesClient k8s = new KubernetesClientBuilder().build()) {
+                    k8s.apps().deployments().inNamespace("default").withName("latency").scale(neededsize);
+                    log.info("I have Upscaled group {} you should have {}", "testgroup1", neededsize);
+                }
             } else if (replicasForscale == 0) {
                 if (metadataConsumer == null) {
                     KafkaConsumerConfig config = KafkaConsumerConfig.fromEnv();
@@ -85,8 +84,8 @@ public class BinPackLag3 {
             }
         } else if (BinPackState3.action.equals("down")) {
             int neededsized = binPackAndScaled();
-            int replicasForscaled =  BinPackState3.size - neededsized;
-            if (replicasForscaled <  BinPackState3.size ) {
+            int replicasForscaled = BinPackState3.size - neededsized;
+            if (replicasForscaled < BinPackState3.size) {
                 log.info("We have to downscale  group by {} {}", "testgroup1", replicasForscaled);
                 BinPackState3.size = neededsized;
                 LastUpScaleDecision = Instant.now();
@@ -101,32 +100,33 @@ public class BinPackLag3 {
     }
 
 
-    private  static int binPackAndScale() {
+    private static int binPackAndScale() {
         log.info(" shall we upscale group {}", "testgroup1");
         List<Consumer> consumers = new ArrayList<>();
         int consumerCount = 1;
-       // List<Partition> parts = new ArrayList<>(ArrivalRates.topicpartitions);
+        // List<Partition> parts = new ArrayList<>(ArrivalRates.topicpartitions);
         List<Partition> parts = new ArrayList<>(ArrivalRates.topicpartitions);
 
 
         float fraction = 0.9f;
 
         for (Partition partition : parts) {
-            if (partition.getLag() >  ArrivalRates.processingRate*wsla * fraction) {
+            if (partition.getLag() > ArrivalRates.processingRate * wsla * fraction) {
                 log.info("Since partition {} has lag {} higher than consumer capacity times wsla {}" +
-                        " we are truncating its lag", partition.getId(), partition.getLag(),  ArrivalRates.processingRate*wsla* fraction);
-                partition.setLag((long)( ArrivalRates.processingRate*wsla* fraction));
+                                " we are truncating its lag", partition.getId(), partition.getLag(),
+                        ArrivalRates.processingRate * wsla * fraction);
+                partition.setLag((long) (ArrivalRates.processingRate * wsla * fraction));
             }
         }
         //if a certain partition has an arrival rate  higher than R  set its arrival rate  to R
         //that should not happen in a well partionned topic
         for (Partition partition : parts) {
-            if (partition.getArrivalRate() >  ArrivalRates.processingRate *fraction) {
+            if (partition.getArrivalRate() > ArrivalRates.processingRate * fraction) {
                 log.info("Since partition {} has arrival rate {} higher than consumer service rate {}" +
                                 " we are truncating its arrival rate", partition.getId(),
                         String.format("%.2f", partition.getArrivalRate()),
-                        String.format("%.2f", ArrivalRates.processingRate *fraction ));
-                partition.setArrivalRate( ArrivalRates.processingRate*fraction );
+                        String.format("%.2f", ArrivalRates.processingRate * fraction));
+                partition.setArrivalRate(ArrivalRates.processingRate * fraction);
             }
         }
         //start the bin pack FFD with sort
@@ -136,8 +136,8 @@ public class BinPackLag3 {
             int j;
             consumers.clear();
             for (int t = 0; t < consumerCount; t++) {
-                consumers.add(new Consumer((String.valueOf(t)),  (long)( ArrivalRates.processingRate*wsla*fraction),
-                        ArrivalRates.processingRate*fraction/*dynamicAverageMaxConsumptionRate*wsla*/));
+                consumers.add(new Consumer((String.valueOf(t)), (long) (ArrivalRates.processingRate * wsla * fraction),
+                        ArrivalRates.processingRate * fraction/*dynamicAverageMaxConsumptionRate*wsla*/));
             }
 
             for (j = 0; j < parts.size(); j++) {
@@ -158,25 +158,25 @@ public class BinPackLag3 {
             if (j == parts.size())
                 break;
         }
-        assignment= consumers;
+        assignment = consumers;
         log.info(" The BP up scaler recommended for group {} {}", "testgroup1", consumers.size());
         return consumers.size();
     }
 
-    private static  int binPackAndScaled() {
+    private static int binPackAndScaled() {
         log.info(" shall we down scale group {} ", "testgroup1");
         List<Consumer> consumers = new ArrayList<>();
         int consumerCount = 1;
-       // List<Partition> parts = new ArrayList<>(ArrivalRates.topicpartitions);
+        // List<Partition> parts = new ArrayList<>(ArrivalRates.topicpartitions);
         List<Partition> parts = new ArrayList<>(ArrivalRates.topicpartitions);
 
-        double fractiondynamicAverageMaxConsumptionRate =  ArrivalRates.processingRate*0.4;
+        double fractiondynamicAverageMaxConsumptionRate = ArrivalRates.processingRate * 0.4;
         for (Partition partition : parts) {
-            if (partition.getLag() > fractiondynamicAverageMaxConsumptionRate*wsla) {
+            if (partition.getLag() > fractiondynamicAverageMaxConsumptionRate * wsla) {
                 log.info("Since partition {} has lag {} higher than consumer capacity times wsla {}" +
                                 " we are truncating its lag", partition.getId(), partition.getLag(),
-                        fractiondynamicAverageMaxConsumptionRate*wsla);
-                partition.setLag((long)(fractiondynamicAverageMaxConsumptionRate *wsla));
+                        fractiondynamicAverageMaxConsumptionRate * wsla);
+                partition.setLag((long) (fractiondynamicAverageMaxConsumptionRate * wsla));
             }
         }
 
@@ -198,8 +198,8 @@ public class BinPackLag3 {
             consumers.clear();
             for (int t = 0; t < consumerCount; t++) {
                 //TO be Corrected // String.valueOf(t) fortunately does not affectr for now..
-                consumers.add(new Consumer((String.valueOf(consumerCount)),
-                        (long)(fractiondynamicAverageMaxConsumptionRate*wsla),
+                consumers.add(new Consumer((String.valueOf(t)),
+                        (long) (fractiondynamicAverageMaxConsumptionRate * wsla),
                         fractiondynamicAverageMaxConsumptionRate));
             }
 
