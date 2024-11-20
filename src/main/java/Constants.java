@@ -11,7 +11,7 @@ public class Constants {
 
 
     public static void init(){
-        if(Controller.decisionIntervalms <= 20000)
+        if(Controller.decisionIntervalms <= 10000)
         {
             rate = 10;
         }
@@ -35,9 +35,6 @@ public class Constants {
 
         topic1p4 = "http://prometheus-operated:9090/api/v1/query?" +
                 "query=sum(rate(kafka_topic_partition_current_offset%7Btopic=%22testtopic1%22,partition=%224%22,namespace=%22default%22%7D%5B"+rate +"s%5D))";
-
-
-
 
 
         System.out.println(rate);
