@@ -13,7 +13,7 @@ public class Constants {
     public static void init(){
         if(Controller.decisionIntervalms <= 20000)
         {
-            rate = 20;
+            rate = 10;
         }
         else {
             rate = (int) Controller.decisionIntervalms/1000;

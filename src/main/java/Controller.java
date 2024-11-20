@@ -8,7 +8,7 @@ public class Controller implements Runnable {
 /*    static BinPackState2 bps;
     static BinPackLag2 bpl;*/
 
-    static long  decisionIntervalms = 30000;
+    static long  decisionIntervalms = 1000;
 
 
 
