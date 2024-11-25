@@ -142,6 +142,8 @@ public class BinPackState2 {
             int j;
             consumers.clear();
             for (int t = 0; t < consumerCount; t++) {
+
+                //TODO  String.valueOf(t)
                 consumers.add(new Consumer((String.valueOf(consumerCount)),
                         (long)(fractiondynamicAverageMaxConsumptionRate*wsla),
                         fractiondynamicAverageMaxConsumptionRate));

@@ -83,6 +83,8 @@ public class Controller implements Runnable {
             log.info("no action, previous action is not seen yet");
             return;
         }
+
+        //if(BinPackLag3.)
         BinPackState3.scaleAsPerBinPack();
         if (BinPackState3.action.equals("up") || BinPackState3.action.equals("down")
                 || BinPackState3.action.equals("REASS")) {

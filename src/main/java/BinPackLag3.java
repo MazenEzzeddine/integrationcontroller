@@ -39,7 +39,7 @@ public class BinPackLag3 {
 
     public static void scaleAsPerBinPack() {
 
-        log.info("Currently we have this number of consumers group {} {}", "testgroup1", BinPackState2.size);
+        log.info("Currently we have this number of consumers group {} {}", "testgroup1", BinPackState3.size);
 
         for (int i = 0; i < 5; i++) {
 
@@ -84,9 +84,9 @@ public class BinPackLag3 {
             }
         } else if (BinPackState3.action.equals("down")) {
             int neededsized = binPackAndScaled();
-            int replicasForscaled = BinPackState3.size - neededsized;
-            if (replicasForscaled < BinPackState3.size) {
-                log.info("We have to downscale  group by {} {}", "testgroup1", replicasForscaled);
+            int replicasForscaled = neededsized - BinPackState3.size;// BinPackState3.size - neededsized;
+            if (replicasForscaled < 0) {
+                log.info("We have to downscale  group by {} {}", "testgroup1", BinPackState3.size - neededsized);
                 BinPackState3.size = neededsized;
                 LastUpScaleDecision = Instant.now();
                 try (final KubernetesClient k8s = new KubernetesClientBuilder().build()) {
