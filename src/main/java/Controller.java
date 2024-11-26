@@ -1,12 +1,13 @@
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.concurrent.ExecutionException;
 
 public class Controller implements Runnable {
     private static final Logger log = LogManager.getLogger(Controller.class);
-/*    static BinPackState2 bps;
-    static BinPackLag2 bpl;*/
+
 
     static long  decisionIntervalms = 1000;
 
@@ -15,8 +16,6 @@ public class Controller implements Runnable {
 
 
     private static void initialize() throws InterruptedException, ExecutionException {
-      /*  bps = new BinPackState2();
-        bpl = new BinPackLag2();*/
 
         Constants.init();
         Lag.readEnvAndCrateAdminClient();
@@ -29,8 +28,7 @@ public class Controller implements Runnable {
            // Lag.getCommittedLatestOffsetsAndLag();
             log.info("--------------------");
             log.info("--------------------");
-            //scaleLogic();
-            //scaleLogicTail2();
+
 
             if(ArrivalRates.processingRate != 0) {
                 scaleLogicTail3();
@@ -61,6 +59,7 @@ public class Controller implements Runnable {
     }*/
 
 
+/*
     private static void scaleLogicTail2() throws InterruptedException, ExecutionException {
         if (Lag.queryConsumerGroup() != BinPackState2.size) {
             log.info("no action, previous action is not seen yet");
@@ -72,6 +71,7 @@ public class Controller implements Runnable {
             BinPackLag2.scaleAsPerBinPack();
         }
     }
+*/
 
 
 
@@ -79,12 +79,13 @@ public class Controller implements Runnable {
     private static void scaleLogicTail3() throws InterruptedException, ExecutionException {
 
         //TODO BinPackLag3.size()=> it is OK
-        if (Lag.queryConsumerGroup() != BinPackState3.size) {
+        if (Lag.queryConsumerGroup() != BinPackState3.size
+              /*  Duration.between(BinPackLag3.LastUpScaleDecision,Instant.now()).getSeconds() < 10*/)  /*&& !BinPackLag3.waitAssign*/ {
+            //BinPackLag3.LastUpScaleDecision = Instant.now();
             log.info("no action, previous action is not seen yet");
             return;
         }
 
-        //if(BinPackLag3.)
         BinPackState3.scaleAsPerBinPack();
         if (BinPackState3.action.equals("up") || BinPackState3.action.equals("down")
                 || BinPackState3.action.equals("REASS")) {

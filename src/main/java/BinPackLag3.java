@@ -20,10 +20,11 @@ public class BinPackLag3 {
     //0.5 WSLA is reached around 85 events/sec
     static double wsla = 0.5;
 
-    static double rebTime = 0.05;//2.0;
+    static double rebTime = 0.05;//2;//0.5;//0.05;//2.0;
     static List<Consumer> assignment = new ArrayList<Consumer>();
     static List<Consumer> currentAssignment = new ArrayList<Consumer>();
     private static KafkaConsumer<byte[], byte[]> metadataConsumer;
+
 
     static double mu = 200.0;
 

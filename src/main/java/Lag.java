@@ -58,7 +58,6 @@ public class Lag {
             totalLag += partitions.get(i).getLag();
             log.info("partition {} has lag {}", i, partitions.get(i).getLag());
         }
-        //addParentLag(totalLag);
         log.info("total lag {}", totalLag);
     }
 
