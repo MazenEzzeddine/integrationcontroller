@@ -25,7 +25,7 @@ public class Controller implements Runnable {
             log.info("Querying Prometheus");
           //  ArrivalProducer.callForArrivals();
             ArrivalRates.arrivalRateTopic1();
-           // Lag.getCommittedLatestOffsetsAndLag();
+            Lag.getCommittedLatestOffsetsAndLag();
             log.info("--------------------");
             log.info("--------------------");
 

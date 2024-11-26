@@ -30,11 +30,11 @@ public class Lag {
         admin = AdminClient.create(props);
 
         //no need for partitions here they are already defined in ArrivalProducer/Rates
-        for (int i = 0; i < 5; i++) {
+       /* for (int i = 0; i < 5; i++) {
             ArrivalProducer.topicpartitions.get(i).setLag(0L);
             Partition p = new Partition(i,0L,0.0);
             partitions.add(p);
-        }
+        }*/
     }
 
 
@@ -52,11 +52,11 @@ public class Lag {
             TopicPartition t = new TopicPartition(topic, i);
             long latestOffset = latestOffsets.get(t).offset();
             long committedoffset = committedOffsets.get(t).offset();
-            partitions.get(i).setLag(latestOffset - committedoffset);
-           ArrivalProducer.topicpartitions.get(i).setLag(latestOffset-committedoffset);
-           // ArrivalRates.topicpartitions.get(i).setLag(latestOffset-committedoffset);
-            totalLag += partitions.get(i).getLag();
-            log.info("partition {} has lag {}", i, partitions.get(i).getLag());
+            //partitions.get(i).setLag(latestOffset - committedoffset);
+           //ArrivalProducer.topicpartitions.get(i).setLag(latestOffset-committedoffset);
+            ArrivalRates.topicpartitions.get(i).setLag(latestOffset-committedoffset);
+            totalLag += ArrivalRates.topicpartitions.get(i).getLag();
+            log.info("partition {} has lag {}", i, ArrivalRates.topicpartitions.get(i).getLag());
         }
         log.info("total lag {}", totalLag);
     }

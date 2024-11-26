@@ -90,7 +90,7 @@ public class ArrivalRates {
         }
         log.info("totalArrivalRate for  topic 1 {}", totalarrivalstopic1);
 
-        partition = 0;
+      /*  partition = 0;
         double totallag = 0.0;
         long partitionLag = 0L;
         for (CompletableFuture<String> cf : partitionslagfuture) {
@@ -105,7 +105,7 @@ public class ArrivalRates {
             log.info("lag of partition {} is {}", partition,  partitionLag);
             partition++;
         }
-        log.info("totalLag for topic 1 {}", totallag);
+        log.info("totalLag for topic 1 {}", totallag);*/
         queryLatency();
         log.info("******************");
     }

@@ -20,7 +20,7 @@ public class BinPackLag3 {
     //0.5 WSLA is reached around 85 events/sec
     static double wsla = 0.5;
 
-    static double rebTime = 0.05;//2;//0.5;//0.05;//2.0;
+    static double rebTime = 0.5;//2; //0.05;//2;//0.5;//0.05;//2.0;
     static List<Consumer> assignment = new ArrayList<Consumer>();
     static List<Consumer> currentAssignment = new ArrayList<Consumer>();
     private static KafkaConsumer<byte[], byte[]> metadataConsumer;
@@ -43,13 +43,6 @@ public class BinPackLag3 {
         log.info("Currently we have this number of consumers group {} {}", "testgroup1", BinPackState3.size);
 
         for (int i = 0; i < 5; i++) {
-
-            //ArrivalRates
-  /*          ArrivalRates.topicpartitions.get(i).setLag(ArrivalRates.topicpartitions.get(i).getLag()
-                    + (long) ((ArrivalProducer.totalArrivalrate * rebTime)/5.0));*/
-           /* ArrivalRates.topicpartitions.get(i).setLag(ArrivalRates.topicpartitions.get(i).getLag()
-                    + (long) ((ArrivalProducer.totalArrivalrate * rebTime)/5.0));*/
-
 
             ArrivalRates.topicpartitions.get(i).setLag(ArrivalRates.topicpartitions.get(i).getLag() +
                     (long) (ArrivalRates.topicpartitions.get(i).getArrivalRate() * rebTime));
@@ -230,37 +223,6 @@ public class BinPackLag3 {
 
 
 
-   /* private static  boolean assignmentViolatesTheSLA() {
-
-   // it is not the currentAssignment
-        for (Consumer cons : currentAssignment) {
-            if (cons.getRemainingLagCapacity() < or =  (long) (wsla*200*.9f)||
-                    cons.getRemainingArrivalCapacity() < 200f*0.9f){
-                return true;
-            }
-        }
-        return false;
-    }*/
-
-
-   /* private static boolean assignmentViolatesTheSLA2() {
-
-        List<Partition> partsReset = new ArrayList<>(ArrivalRates.topicpartitions);
-        for (Consumer cons : currentAssignment) {
-            double sumPartitionsArrival = 0;
-            double sumPartitionsLag = 0;
-            for (Partition p : cons.getAssignedPartitions()) {
-                sumPartitionsArrival += partsReset.get(p.getId()).getArrivalRate();
-                sumPartitionsLag += partsReset.get(p.getId()).getLag();
-            }
-
-            if (sumPartitionsLag  > ( wsla * 200  * .9f)
-                    || sumPartitionsArrival > 200* 0.9f) {
-                return true;
-            }
-        }
-        return false;
-    }*/
 
 
 }
