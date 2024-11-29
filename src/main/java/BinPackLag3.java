@@ -20,13 +20,15 @@ public class BinPackLag3 {
     //0.5 WSLA is reached around 85 events/sec
     static double wsla = 0.5;
 
-    static double rebTime = 0.5;//2; //0.05;//2;//0.5;//0.05;//2.0;
+    static double rebTime = 0.05; //0.5;//2; //0.05;//2;//0.5;//0.05;//2.0;
     static List<Consumer> assignment = new ArrayList<Consumer>();
     static List<Consumer> currentAssignment = new ArrayList<Consumer>();
     private static KafkaConsumer<byte[], byte[]> metadataConsumer;
 
 
     static double mu = 200.0;
+
+    static boolean waitAssign = false;
 
 
     static {
@@ -62,6 +64,7 @@ public class BinPackLag3 {
                     k8s.apps().deployments().inNamespace("default").withName("latency").scale(neededsize);
                     log.info("I have Upscaled group {} you should have {}", "testgroup1", neededsize);
                 }
+                waitAssign = true;
             } else if (replicasForscale == 0) {
                 if (metadataConsumer == null) {
                     KafkaConsumerConfig config = KafkaConsumerConfig.fromEnv();
@@ -75,6 +78,7 @@ public class BinPackLag3 {
                 }
                 currentAssignment = List.copyOf(assignment);
                 metadataConsumer.enforceRebalance();
+                waitAssign= true;
             }
         } else if (BinPackState3.action.equals("down")) {
             int neededsized = binPackAndScaled();
@@ -88,6 +92,7 @@ public class BinPackLag3 {
                     log.info("I have downscaled group {} you should have {}", "testgroup1", neededsized);
                 }
                 currentAssignment = List.copyOf(assignment);
+                waitAssign = true;
             }
         }
         log.info("===================================");

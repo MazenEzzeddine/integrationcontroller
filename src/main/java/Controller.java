@@ -79,9 +79,10 @@ public class Controller implements Runnable {
     private static void scaleLogicTail3() throws InterruptedException, ExecutionException {
 
         //TODO BinPackLag3.size()=> it is OK
-        if (Lag.queryConsumerGroup() != BinPackState3.size
+        if (Lag.queryConsumerGroup() != BinPackState3.size  || BinPackLag3.waitAssign
               /*  Duration.between(BinPackLag3.LastUpScaleDecision,Instant.now()).getSeconds() < 10*/)  /*&& !BinPackLag3.waitAssign*/ {
             //BinPackLag3.LastUpScaleDecision = Instant.now();
+
             log.info("no action, previous action is not seen yet");
             return;
         }

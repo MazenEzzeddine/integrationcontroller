@@ -56,7 +56,7 @@ public class AssignmentServer implements Runnable {
         public void getAssignment(AssignmentRequest request, StreamObserver<AssignmentResponse> responseObserver) {
 
             //Correct...
-            if (BinPackLag3.currentAssignment.size() == 0) {
+           /* if (BinPackLag3.currentAssignment.size() == 0) {
                 List<ConsumerGrpc> assignmentReply = new ArrayList<>();
                 for (int i = 0; i < 5; i++) {
                     List<PartitionGrpc> pgrpclist = new ArrayList<>();
@@ -73,7 +73,8 @@ public class AssignmentServer implements Runnable {
                 log.info("Sent Assignment to client");
                 return;
             }
-            log.info(request.getRequest());
+            log.info(request.getRequest());*/
+
             //TODO Synchronize access to assignment
             List<Consumer> assignment = BinPackLag3.currentAssignment;
             log.info("The assignment is {}", assignment);
@@ -99,6 +100,10 @@ public class AssignmentServer implements Runnable {
             responseObserver.onNext(AssignmentResponse.newBuilder().addAllConsumers(assignmentReply).build());
             responseObserver.onCompleted();
             log.info("Sent Assignment to client");
+
+            if(BinPackLag3.waitAssign) {
+                BinPackLag3.waitAssign = false;
+            }
 
         }
     }
