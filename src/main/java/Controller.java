@@ -1,3 +1,4 @@
+import org.apache.kafka.common.ConsumerGroupState;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -21,6 +22,9 @@ public class Controller implements Runnable {
         Lag.readEnvAndCrateAdminClient();
         log.info("Warming 15  seconds.");
         Thread.sleep(15 * 1000);
+
+      /*  log.info("Warming  3  minutes");
+        Thread.sleep(60*3 * 1000);*/
         while (true) {
             log.info("Querying Prometheus");
           //  ArrivalProducer.callForArrivals();
@@ -79,7 +83,7 @@ public class Controller implements Runnable {
     private static void scaleLogicTail3() throws InterruptedException, ExecutionException {
 
         //TODO BinPackLag3.size()=> it is OK
-        if (Lag.queryConsumerGroup() != BinPackState3.size  || BinPackLag3.waitAssign
+        if (Lag.queryConsumerGroup() != BinPackState3.size  || /*BinPackLag3.waitAssign*/ Lag.queryConsumerGroupState() != ConsumerGroupState.STABLE
               /*  Duration.between(BinPackLag3.LastUpScaleDecision,Instant.now()).getSeconds() < 10*/)  /*&& !BinPackLag3.waitAssign*/ {
             //BinPackLag3.LastUpScaleDecision = Instant.now();
 

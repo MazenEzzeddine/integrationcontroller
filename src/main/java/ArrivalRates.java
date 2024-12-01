@@ -21,7 +21,7 @@ public class ArrivalRates {
 
     static {
         topicpartitions = new ArrayList<>();
-        for (int i = 0; i <= 4; i++) {
+        for (int i = 0; i <= Lag.nbPartitions; i++) {
             topicpartitions.add(new Partition(i, 0, 0));
         }
     }
@@ -36,7 +36,12 @@ public class ArrivalRates {
                     new URI(Constants.topic1p1),
                     new URI(Constants.topic1p2),
                     new URI(Constants.topic1p3),
-                    new URI(Constants.topic1p4)
+                    new URI(Constants.topic1p4),
+                    new URI(Constants.topic1p5),
+                    new URI(Constants.topic1p6),
+                    new URI(Constants.topic1p7),
+                    new URI(Constants.topic1p8),
+                    new URI(Constants.topic1p9)
             );
         } catch (URISyntaxException e) {
             e.printStackTrace();

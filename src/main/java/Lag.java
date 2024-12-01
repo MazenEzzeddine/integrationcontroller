@@ -1,5 +1,6 @@
 import org.apache.kafka.clients.admin.*;
 import org.apache.kafka.clients.consumer.OffsetAndMetadata;
+import org.apache.kafka.common.ConsumerGroupState;
 import org.apache.kafka.common.KafkaFuture;
 import org.apache.kafka.common.TopicPartition;
 import org.apache.logging.log4j.LogManager;
@@ -19,6 +20,8 @@ public class Lag {
     //////////////////////////////////////////////////////////////////////////////
     static ArrayList<Partition> partitions = new ArrayList<>();
     static Map<String, ConsumerGroupDescription> consumerGroupDescriptionMap;
+
+    static int nbPartitions=10;
 
 
     public  static void readEnvAndCrateAdminClient() throws ExecutionException, InterruptedException {
@@ -42,13 +45,13 @@ public class Lag {
         committedOffsets = admin.listConsumerGroupOffsets(CONSUMER_GROUP)
                 .partitionsToOffsetAndMetadata().get();
         Map<TopicPartition, OffsetSpec> requestLatestOffsets = new HashMap<>();
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < nbPartitions; i++) {
             requestLatestOffsets.put(new TopicPartition(topic, i), OffsetSpec.latest());
         }
         Map<TopicPartition, ListOffsetsResult.ListOffsetsResultInfo> latestOffsets =
                 admin.listOffsets(requestLatestOffsets).all().get();
          totalLag=0L;
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < nbPartitions; i++) {
             TopicPartition t = new TopicPartition(topic, i);
             long latestOffset = latestOffsets.get(t).offset();
             long committedoffset = committedOffsets.get(t).offset();
@@ -71,8 +74,21 @@ public class Lag {
                 describeConsumerGroupsResult.all();
         consumerGroupDescriptionMap = futureOfDescribeConsumerGroupsResult.get();
         int members = consumerGroupDescriptionMap.get("testgroup1").members().size();
+
         log.info("consumers nb as per kafka {}", members );
         return members;
+    }
+
+    public  static ConsumerGroupState queryConsumerGroupState() throws ExecutionException, InterruptedException {
+        DescribeConsumerGroupsResult describeConsumerGroupsResult =
+                admin.describeConsumerGroups(Collections.singletonList("testgroup1"));
+        KafkaFuture<Map<String, ConsumerGroupDescription>> futureOfDescribeConsumerGroupsResult =
+                describeConsumerGroupsResult.all();
+        consumerGroupDescriptionMap = futureOfDescribeConsumerGroupsResult.get();
+           ConsumerGroupState state =  consumerGroupDescriptionMap.get("testgroup1").state();
+
+        log.info("consumer group state  {}", state );
+        return state;
     }
 
 }
