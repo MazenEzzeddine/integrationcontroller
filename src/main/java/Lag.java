@@ -21,7 +21,7 @@ public class Lag {
     static ArrayList<Partition> partitions = new ArrayList<>();
     static Map<String, ConsumerGroupDescription> consumerGroupDescriptionMap;
 
-    static int nbPartitions=10;
+    static int nbPartitions=10;//5;//10;
 
 
     public  static void readEnvAndCrateAdminClient() throws ExecutionException, InterruptedException {

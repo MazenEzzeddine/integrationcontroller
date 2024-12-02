@@ -31,15 +31,16 @@ public class BinPackLag3 {
     static boolean waitAssign = false;
 
 
-  /*  static {
+/*
+    static {
         currentAssignment.add(new Consumer("0", (long) (mu * wsla * .9),
                 mu * .9));
         for (Partition p : ArrivalRates.topicpartitions) {
             currentAssignment.get(0).assignPartition(p);
         }
     }
-*/
 
+*/
 
     static {
         for (int i = 0; i < 10; i++) {
@@ -55,7 +56,7 @@ public class BinPackLag3 {
 
         log.info("Currently we have this number of consumers group {} {}", "testgroup1", BinPackState3.size);
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < Lag.nbPartitions; i++) {
 
             ArrivalRates.topicpartitions.get(i).setLag(ArrivalRates.topicpartitions.get(i).getLag() +
                     (long) (ArrivalRates.topicpartitions.get(i).getArrivalRate() * rebTime));

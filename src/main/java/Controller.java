@@ -20,11 +20,11 @@ public class Controller implements Runnable {
 
         Constants.init();
         Lag.readEnvAndCrateAdminClient();
-        log.info("Warming 15  seconds.");
-        Thread.sleep(15 * 1000);
+  /*      log.info("Warming 15  seconds.");
+        Thread.sleep(15 * 1000);*/
 
-      /*  log.info("Warming  3  minutes");
-        Thread.sleep(60*3 * 1000);*/
+        log.info("Warming  4  minutes");
+        Thread.sleep(60*4 * 1000);
         while (true) {
             log.info("Querying Prometheus");
           //  ArrivalProducer.callForArrivals();

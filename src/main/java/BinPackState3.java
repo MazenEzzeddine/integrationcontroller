@@ -10,7 +10,7 @@ import java.util.List;
 public class BinPackState3 {
     //TODO give fup and fdown as paramters to the functions.
     private static final Logger log = LogManager.getLogger(BinPackState3.class);
-    public static int size = 10;
+    public static int size = 10;//1; //10;
     public Instant LastUpScaleDecision = Instant.now();
     //0.5 WSLA is reached around 85 events/sec
     static double wsla = 0.5;
@@ -58,7 +58,7 @@ public class BinPackState3 {
         for (Partition partition : parts) {
 
             //TODO change this 200 to ArrivalRates.processingRate
-            if (partition.getLag() > 200 * wsla * fraction) {
+            if (partition.getLag() > ArrivalRates.processingRate * wsla * fraction) {
                 log.info("Since partition {} has lag {} higher than consumer capacity times wsla {}" +
                         " we are truncating its lag", partition.getId(), partition.getLag(), ArrivalRates.processingRate * wsla * fraction);
                 partition.setLag((long) (ArrivalRates.processingRate * wsla * fraction));

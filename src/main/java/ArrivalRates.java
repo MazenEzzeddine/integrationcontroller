@@ -21,7 +21,7 @@ public class ArrivalRates {
 
     static {
         topicpartitions = new ArrayList<>();
-        for (int i = 0; i <= Lag.nbPartitions; i++) {
+        for (int i = 0; i < Lag.nbPartitions; i++) {
             topicpartitions.add(new Partition(i, 0, 0));
         }
     }
