@@ -18,9 +18,9 @@ public class Constants {
 
 
     public static void init(){
-        if(Controller.decisionIntervalms <= 10000)
+        if(Controller.decisionIntervalms <= 20000)
         {
-            rate = 10;
+            rate = 20;
         }
         else {
             rate = (int) Controller.decisionIntervalms/1000;
@@ -60,7 +60,6 @@ public class Constants {
     }
 
 
-    //HttpClient client = HttpClient.newHttpClient();
 
 
 

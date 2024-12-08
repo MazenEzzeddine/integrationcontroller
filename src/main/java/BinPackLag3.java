@@ -20,7 +20,7 @@ public class BinPackLag3 {
     //0.5 WSLA is reached around 85 events/sec
     static double wsla = 0.5;
 
-    static double rebTime = 0.05; //0.5;//2; //0.05;//2;//0.5;//0.05;//2.0;
+    static double rebTime = 0.75;//0.05; //0.5;//2; //0.05;//2;//0.5;//0.05;//2.0;
     static List<Consumer> assignment = new ArrayList<Consumer>();
     static List<Consumer> currentAssignment = new ArrayList<Consumer>();
     private static KafkaConsumer<byte[], byte[]> metadataConsumer;
@@ -43,10 +43,11 @@ public class BinPackLag3 {
 */
 
     static {
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < Lag.nbPartitions; i++) {
             currentAssignment.add(new Consumer(String.valueOf(i), (long) (mu * wsla * .9),
                     mu * .9));
-            currentAssignment.get(i).assignPartition(ArrivalRates.topicpartitions.get(i));
+           // currentAssignment.get(i).assignPartition(ArrivalRates.topicpartitions.get(i));
+            currentAssignment.get(0).assignPartition(ArrivalRates.topicpartitions.get(i));
             System.out.println("Consumer " + i + " assigned partition " + i);
         }
     }
@@ -57,7 +58,6 @@ public class BinPackLag3 {
         log.info("Currently we have this number of consumers group {} {}", "testgroup1", BinPackState3.size);
 
         for (int i = 0; i < Lag.nbPartitions; i++) {
-
             ArrivalRates.topicpartitions.get(i).setLag(ArrivalRates.topicpartitions.get(i).getLag() +
                     (long) (ArrivalRates.topicpartitions.get(i).getArrivalRate() * rebTime));
         }
