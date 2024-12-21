@@ -15,6 +15,12 @@ public class Constants {
     static String topic1p8;
     static String topic1p9;
 
+    static String topic1p10;
+    static String topic1p11;
+    static String topic1p12;
+    static String topic1p13;
+    static String topic1p14;
+
 
 
     public static void init(){
@@ -57,6 +63,21 @@ public class Constants {
 
         topic1p9 = "http://prometheus-operated:9090/api/v1/query?" +
                 "query=sum(rate(kafka_topic_partition_current_offset%7Btopic=%22testtopic1%22,partition=%229%22,namespace=%22default%22%7D%5B"+rate +"s%5D))";
+
+
+        topic1p10 = "http://prometheus-operated:9090/api/v1/query?" +
+                "query=sum(rate(kafka_topic_partition_current_offset%7Btopic=%22testtopic1%22,partition=%2210%22,namespace=%22default%22%7D%5B"+ rate +"s%5D))";
+        topic1p11 = "http://prometheus-operated:9090/api/v1/query?" +
+                "query=sum(rate(kafka_topic_partition_current_offset%7Btopic=%22testtopic1%22,partition=%2211%22,namespace=%22default%22%7D%5B"+ rate +"s%5D))";
+
+        topic1p12 = "http://prometheus-operated:9090/api/v1/query?" +
+                "query=sum(rate(kafka_topic_partition_current_offset%7Btopic=%22testtopic1%22,partition=%2212%22,namespace=%22default%22%7D%5B"+ rate +"s%5D))";
+
+        topic1p13 = "http://prometheus-operated:9090/api/v1/query?" +
+                "query=sum(rate(kafka_topic_partition_current_offset%7Btopic=%22testtopic1%22,partition=%2213%22,namespace=%22default%22%7D%5B"+ rate +"s%5D))";
+
+        topic1p14 = "http://prometheus-operated:9090/api/v1/query?" +
+                "query=sum(rate(kafka_topic_partition_current_offset%7Btopic=%22testtopic1%22,partition=%2214%22,namespace=%22default%22%7D%5B"+rate +"s%5D))";
     }
 
 

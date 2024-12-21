@@ -20,7 +20,7 @@ public class BinPackLag3 {
     //0.5 WSLA is reached around 85 events/sec
     static double wsla = 0.5;
 
-    static double rebTime = 0.75;//0.05; //0.5;//2; //0.05;//2;//0.5;//0.05;//2.0;
+    static double rebTime = 0.05;//0.75;//0.05; //0.5;//2; //0.05;//2;//0.5;//0.05;//2.0;
     static List<Consumer> assignment = new ArrayList<Consumer>();
     static List<Consumer> currentAssignment = new ArrayList<Consumer>();
     private static KafkaConsumer<byte[], byte[]> metadataConsumer;
@@ -47,8 +47,8 @@ public class BinPackLag3 {
             currentAssignment.add(new Consumer(String.valueOf(i), (long) (mu * wsla * .9),
                     mu * .9));
            // currentAssignment.get(i).assignPartition(ArrivalRates.topicpartitions.get(i));
-            currentAssignment.get(0).assignPartition(ArrivalRates.topicpartitions.get(i));
-            System.out.println("Consumer " + i + " assigned partition " + i);
+            currentAssignment.get(i).assignPartition(ArrivalRates.topicpartitions.get(i));
+            System.out.println("Consumer "  + i + " assigned partition " + i);
         }
     }
 
@@ -181,7 +181,7 @@ public class BinPackLag3 {
         // List<Partition> parts = new ArrayList<>(ArrivalRates.topicpartitions);
         List<Partition> parts = new ArrayList<>(ArrivalRates.topicpartitions);
 
-        double fractiondynamicAverageMaxConsumptionRate = ArrivalRates.processingRate * 0.4;
+        double fractiondynamicAverageMaxConsumptionRate = ArrivalRates.processingRate * 0.2;
         for (Partition partition : parts) {
             if (partition.getLag() > fractiondynamicAverageMaxConsumptionRate * wsla) {
                 log.info("Since partition {} has lag {} higher than consumer capacity times wsla {}" +

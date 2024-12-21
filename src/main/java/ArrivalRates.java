@@ -36,12 +36,18 @@ public class ArrivalRates {
                     new URI(Constants.topic1p1),
                     new URI(Constants.topic1p2),
                     new URI(Constants.topic1p3),
-                    new URI(Constants.topic1p4)
-                   /* new URI(Constants.topic1p5),
-                    new URI(Constants.topic1p6),
-                    new URI(Constants.topic1p7),
+                    new URI(Constants.topic1p4),
+                    new URI(Constants.topic1p5),
+                    new URI(Constants.topic1p6)
+                   /*  new URI(Constants.topic1p7),
                     new URI(Constants.topic1p8),
-                    new URI(Constants.topic1p9)*/
+                    new URI(Constants.topic1p9),
+                    new URI(Constants.topic1p10),
+                    new URI(Constants.topic1p11),
+                    new URI(Constants.topic1p12),
+                    new URI(Constants.topic1p13),
+                    new URI(Constants.topic1p14)*/
+
             );
         } catch (URISyntaxException e) {
             e.printStackTrace();
