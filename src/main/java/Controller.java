@@ -17,7 +17,6 @@ public class Controller implements Runnable {
 
 
     private static void initialize() throws InterruptedException, ExecutionException {
-
         Constants.init();
         Lag.readEnvAndCrateAdminClient();
    /*     log.info("Warming 15  seconds.");
@@ -82,11 +81,8 @@ public class Controller implements Runnable {
 
     private static void scaleLogicTail3() throws InterruptedException, ExecutionException {
 
-        //TODO BinPackLag3.size()=> it is OK
-        if (Lag.queryConsumerGroup() != BinPackState3.size  || /*BinPackLag3.waitAssign*/ Lag.queryConsumerGroupState() != ConsumerGroupState.STABLE
-              /*  Duration.between(BinPackLag3.LastUpScaleDecision,Instant.now()).getSeconds() < 10*/)  /*&& !BinPackLag3.waitAssign*/ {
-            //BinPackLag3.LastUpScaleDecision = Instant.now();
-
+        if (Lag.queryConsumerGroup() != BinPackState3.size  ||
+                Lag.queryConsumerGroupState() != ConsumerGroupState.STABLE)  {
             log.info("no action, previous action is not seen yet");
             return;
         }

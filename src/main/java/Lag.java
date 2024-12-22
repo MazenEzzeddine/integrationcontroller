@@ -32,12 +32,6 @@ public class Lag {
         props.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVERS);
         admin = AdminClient.create(props);
 
-        //no need for partitions here they are already defined in ArrivalProducer/Rates
-       /* for (int i = 0; i < 5; i++) {
-            ArrivalProducer.topicpartitions.get(i).setLag(0L);
-            Partition p = new Partition(i,0L,0.0);
-            partitions.add(p);
-        }*/
     }
 
 
